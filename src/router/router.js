@@ -1,39 +1,46 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import isAuthenticatedGuard from "./auth-guard";
 
 const routes = [
   {
     path: "/",
+    redirect: "/pokemon",
+  },
+
+  {
+    path: "/pokemon",
+    name: "pokemon",
     component: () =>
       import(
-        /* webpackChunkName: "ListPage" */ "@/modules/pokemon/layouts/PokemonLayout"
+        /* webpackChunkName: "PokemonLayout" */ "@/modules/pokemon/layouts/PokemonLayout"
       ),
     children: [
       {
-        name: "home",
         path: "home",
+        name: "pokemon-home",
         component: () =>
           import(
             /* webpackChunkName: "ListPage" */ "@/modules/pokemon/pages/ListPage"
           ),
       },
       {
-        name: "pokemon-about",
         path: "about",
+        name: "pokemon-about",
         component: () =>
           import(
             /* webpackChunkName: "AboutPage" */ "@/modules/pokemon/pages/AboutPage"
           ),
       },
       {
-        name: "pokemon-id",
         path: "pokemonid/:id",
+        name: "pokemon-id",
         component: () =>
           import(
             /* webpackChunkName: "PokemonPage" */ "@/modules/pokemon/pages/PokemonPage"
           ),
         props: (route) => {
           const id = Number(route.params.id);
-          return isNaN(id) ? { id: 3 } : { id: id };
+          return isNaN(id) ? { id: 1 } : { id };
         },
       },
       {
@@ -41,6 +48,44 @@ const routes = [
         redirect: { name: "pokemon-about" },
       },
     ],
+  },
+
+  {
+    path: "/dbz",
+    name: "dbz",
+    beforeEnter: [isAuthenticatedGuard],
+    component: () =>
+      import(
+        /* webpackChunkName: "DragonBallLayout" */ "@/modules/dbz/layouts/DragonBallLayout"
+      ),
+    children: [
+      {
+        path: "characters",
+        name: "dbz-characters",
+        component: () =>
+          import(
+            /* webpackChunkName: "ListPage" */ "@/modules/dbz/pages/Characters"
+          ),
+      },
+      {
+        path: "about",
+        name: "dbz-about",
+        component: () =>
+          import(/* webpackChunkName: "About" */ "@/modules/dbz/pages/About"),
+      },
+      {
+        path: "",
+        redirect: { name: "dbz-characters" },
+      },
+    ],
+  },
+
+  {
+    path: "/:pathMatch(.*)*",
+    component: () =>
+      import(
+        /* webpackChunkName: "NoPageFound" */ "@/modules/shared/pages/NoPageFound"
+      ),
   },
 ];
 

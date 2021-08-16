@@ -19,10 +19,10 @@ export default {
   data() {
     return {
       links: [
-        { to: "/home", name: "home" },
-        { to: "/pokemon/1", name: "pokemon" },
-        { to: "/about", name: "about" },
-        { to: "https://google.com", name: "google" },
+        { to: "pokemon-home", name: "Pokemons" },
+        { to: "pokemon-id/1", name: "By Id", id: 1 },
+        { to: "pokemon-about", name: "About" },
+        { to: "https://google.com", name: "Google" },
       ],
     };
   },
